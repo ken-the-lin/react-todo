@@ -168,3 +168,25 @@ And we passed a function to the `onClick` props of the button, so when you click
 Click it! But wait, we did the output go? Remember `console.log('..')` prints something? Where is it printed? <br/>
 The answer is to the browser console. Right-click on a blank space on your browser and click `inspect` (I assume you are using google chrome). You should see a toolbar popup (either from the right or from bottom). Now click the `console` on top of the toolbar. Did you see the output? What happens if you click the button a few more times?
 ## You Are On Your Own...
+Ok. From now on, You are on your own. The goal is to make a todo list that handles adding and deleting items. For you reference, go to https://todo-cdf07.firebaseapp.com/ to get a sense of it.
+<br/> <br/>
+Of course, I will tell you guys what you need to know in order to finish the project, and also give you some useful hints: <br/><br/>
+#### Need to know
+1. About JS, you need to know some array manipulations such as **map, concat, push, slice...** <br/>
+2. About React, you need to know: **state**, **setState**
+3. Doing Codecademy on React will help a little little little little bit. Just that little bit.
+#### Useful hints
+1. `<Form.Control type='text' ref={input => this.textInput = input}/>` This gives you a textfield and you can get the value of the textfiled by `this.textInput.value` <br/><br/>
+2. If you encounter an error says something like "cannot call <functionName> of undefined", this is due to a JS error called 'closure'. It's a simple-complicated error. But a quick fix is to add 
+~~~
+this.<functionName> = this.<functionName>.bind(this)
+~~~
+to the constructor of your component. <br/>
+And example of a consturctor looks like
+~~~
+  constructor(props){
+    super(props)
+    ....
+  }
+~~~
+Alright. You are on your own. When you encounter a problem, try googling it. If you can't find a solution or you are just stuck, even or you find a bug in this writeup, let me know. I have your back. I believe this can be done in one week. Emmmmm. There might be a lot of material to digest. So, let's take 2 weeks to finish this. You can do it.
