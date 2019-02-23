@@ -1,53 +1,39 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { Button, Form, Card, ListGroup } from 'react-bootstrap';
+import { Button, ListGroup, Form } from 'react-bootstrap';
 
 class App extends Component {
-	constructor(props) {
-		super(props);
-		this.handleClick = this.handleClick.bind(this);
-		this.state = {
-			arrInput: [ 'test' ]
-		}
-	}
-	handleClick() {
-		this.state.arrInput.push( this.textInput.value );
-		this.setState( this.state.arrInput );
-		console.log( "state is set");
-	}
-	deleteElement(key) {
-		let firstHalf = this.state.arrInput.slice(0, key);
-		let secondHalf = this.state.arrInput.slice(key+1,this.state.length);
-		console.log( "firstHalf is " + firstHalf);
-		console.log( "secondHalf is " + secondHalf);
-		this.setState( {arrInput: firstHalf.concat(secondHalf)} );
-	}
+  constructor(props){
+    super(props)
+    this.handleClick = this.handleClick.bind(this)
+    this.state = {
+      data: ['example todo, click X to remove ']
+    }
+  }
 
+  handleClick(){        
+    const { data } = this.state
+    data.push(this.textInput.value)
+    this.setState(data)
+  }
+
+  delete(x){
+    const { data } = this.state
+    let topData = data.slice(0, x)
+    let botData = data.slice(x+1)
+    let updateddata = topData.concat(botData)
+    this.setState({data: updateddata})
+  }
 
   render() {
     return (
       <div className="App">
-				<Form.Control
-					type='text'
-					ref={input => this.textInput = input}
-				/>
-				<Button
-					variant="primary"
-					onClick={this.handleClick}>
-						Add
-				</Button>
-				<ListGroup>
-					{this.state.arrInput.map( (todo, key) =>
-					 				<ListGroup.Item key={key}>
-										{todo}
-									<Button
-										variant='danger'
-										onClick={deleteElement => this.deleteElement(key)}>
-											X
-									</Button>
-									</ListGroup.Item> )}
-				</ListGroup>
+        <Form.Control type='text' placeholder="Enter todo then click add" ref={input => this.textInput = input }/>
+        <Button variant="primary" onClick={this.handleClick}>Add</Button>
+            {this.state.data.map((todo, x) =>
+                <ListGroup.Item key={x}>{todo}
+                        <Button variant='danger' onClick={() => this.delete(x)}> X </Button>
+                </ListGroup.Item>)}
       </div>
     );
   }
