@@ -92,8 +92,8 @@ In order to have the bootstrap style work on our project, we need toits style sh
 ~~~
 <link
   rel="stylesheet"
-  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-  integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+  integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
   crossorigin="anonymous"
 />
 ~~~
@@ -125,7 +125,7 @@ Within `App.js` file, you should see the following code
 ~~~
 I want you to delete everything inbetween the `<div>` tag, and write write down 'hello world'. So you should be left with 
 ~~~
-<div className="App">
+<div>
   Hello World
 </div>
 ~~~
@@ -141,32 +141,123 @@ And now let's use the button and add little style and function to it. More info 
 <br/>
 Your App.js should now look lile
 ~~~
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, from 'react';
 import './App.css';
-import { Button } from 'react-bootstrap';
+import { Button, Form, Card, ListGroup } from 'react-bootstrap';
 
-class App extends Component {
-  handleClick(){
-    console.log('click')
-  }
-  render() {
-    return (
-      <div className="App">
-        <Button variant="primary" onClick={this.handleClick}>Primary</Button>
-      </div>
-    );
-  }
+function App() {
+	const handleClick = () => { 
+		console.log("Click");
+	}
+
+	return (
+		<div>
+			<Button variant="primary" onClick={handleClick}>Add</Button>
+		</div>
+	);
 }
 
 export default App;
 ~~~
-The `import { ... } from '...'` is importing code from the package you already installed. In this case, we are importing a button component. <br/>
+The `import { ... } from '...'` is importing code from the package you already installed. In this case, we are importing a button component. <br/><br/>
+The `function App() {...}` is actually a React Component called "functional component". In the old React syntax, you might have seen it written as `class App extends Component { ... }` (class component). They are not exactly the same thing. The main difference is that when using state in the component, class component will rely on setting up `this.state` and using `setState()` to update the state. Whereas functional component relies on using **react hooks** to manage state. React hooks gives us a much more clean styling of code. This todo app will be using react hooks. If these does make much sense to you yet, don't panic. We will talke more about it later.<br/><br/>
 The `variant` gives the style to the button.<br/>
 And we passed a function to the `onClick` props of the button, so when you click it, it will execute the function body. Save the file, and go to the browser, you should see a blue button waiting to be clicked.<br/>
 <br/>
 Click it! But wait, we did the output go? Remember `console.log('..')` prints something? Where is it printed? <br/>
 The answer is to the browser console. Right-click on a blank space on your browser and click `inspect` (I assume you are using google chrome). You should see a toolbar popup (either from the right or from bottom). Now click the `console` on top of the toolbar. Did you see the output? What happens if you click the button a few more times?
+## Let's build a todo-app
+Let's build a todo-app. In this process, you will use some functions to manipulate JS arrays such as **map, concat, push, slice...** <br/>
+Also, you will learn to use react state via using react hooks. 
+
+#### Step1: make a textfield
+It's a todo-app. We need a way to type in the todo item. A textfield is a nice way to do that. In react-bootstrap, this component will give you a textfield:
+~~~
+<Form.Control
+  type='text'
+  onChange={e => console.log(e.target.value)}
+/>
+~~~
+It's better to extrack that `onChange` function out, so let's define a new function `onType` within the app component.
+~~~
+const onType = (event) => {
+  console.log(event.target.value);
+}
+~~~
+The `event` is the argument passed in to the `onType` function when user enters any text on the textfield. `event.target` refers the textfield itself. `event.target.value` is the actual text inside the textfield. 
+Then, substitue the `onChange` function with the `onType` fuction. Your final `App.js` should look like:
+~~~
+import React from 'react';
+import './App.css';
+import { Button, Form } from 'react-bootstrap';
+
+function App() {
+	const handleClick = () => { 
+		console.log("Click");
+	}
+
+	const onType = (event) => {
+		console.log(event.target.value);
+	}
+
+	return (
+		<div>
+			<Form.Control
+				type='text'
+				onChange={onType}
+			/>
+			<Button variant="primary" onClick={handleClick}>Add</Button>
+		</div>
+	);
+}
+
+export default App;
+~~~
+Now go to the browser. As you type text in the textfield, what do you see in the browser?
+#### Introducing state (and react hooks)
+The text in the textfield only lives in `event.target.value`. We would like to save it in some variable such that as the `event.target.value` changes, the variable value changes; Also, we want this variable be used anywhere in this component. To achieve this, we will use `state`. No more words, let's take a look the code on how to make a state:
+~~~
+const [todoContent, setTodoContent] = useState('')
+~~~
+`useState(initialValue)` is the function that allows functional components to use state. It takes an initial value as argument (can be any type) and returns a pair `[stateVar, setStateFunc]`. The `stateVar` is used to read the state value, and `setStateFunc` is used to set the state value. It's better to illustrate with an example, we will see how the textfield value is stored in the state variable, how we read the variable and how we update the variable. All of these will be inside the `onType` function:
+~~~
+const onType = (event) => {
+  console.log(todoContent);
+  setTodoContent(event.target.value)
+}
+~~~
+The `console.log(todoContent)` is reading the state value, and the `setTodoContent(event.target.value)` is setting the state value with the new value. <br/>
+Now the whole `App.js` should look like:
+~~~
+import React, { useState } from 'react';
+import './App.css';
+import { Button, Form } from 'react-bootstrap';
+
+function App() {
+	const [todoContent, setTodoContent] = useState('')
+
+	const handleClick = () => { 
+		console.log("Click");
+	}
+
+	const onType = (event) => {
+		console.log(todoContent);
+		setTodoContent(event.target.value)
+	}
+
+	return (
+		<div>
+			<Form.Control
+				type='text'
+				onChange={onType}
+			/>
+			<Button variant="primary" onClick={handleClick}>Add</Button>
+		</div>
+	);
+}
+
+export default App;
+~~~
 ## You Are On Your Own...
 Ok. From now on, You are on your own. The goal is to make a todo list that handles adding and deleting items. For you reference, go to https://todo-cdf07.firebaseapp.com/ to get a sense of it.
 <br/> <br/>
