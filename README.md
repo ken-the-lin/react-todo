@@ -79,16 +79,16 @@ again, `cd` to the `todo` directory, you should see the project structure looks 
   --README.md
   --yarn.lock
 ~~~
-The directory **node_modules** contains all the project dependecies (It's huge, don't look into it). The file **package.json** keeps track of all the dependencies. From now on, everything you do will be under this directory.
+The directory **node_modules** contains all the project dependecies (It's huge, don't look into it). Whatever third party library we use in the project, they all go into **node_modules**. The file **package.json** keeps track of all the dependencies. Because the **node_modules** is so huge, engineers communicates via **package.json**. It tells other engineers what 3rd party packages this project uses. To recap, **package.json** is a record of the 3rd party packages (the names) you are using for this project, and **node_modules** will contain the actual packages (the code).
 <br/><br/>
 ## setup react-bootstrap 
 Let's install one more package so you are ready to go
 ~~~
 npm install --save react-bootstrap
 ~~~
-The `--save` option tells npm to keep a record on the package.json file. `react-bootstrap` is a UI library that we will use (make you life much easier).
+The `--save` option tells npm to keep a record on the package.json file. `react-bootstrap` is a UI library that we will use (make your life much easier).
 <br/><br/>
-In order to have the bootstrap style work on our project, we need toits style sheet. Open `public/index.html` and paste the following line under the `<head>` tag
+In order to have the bootstrap style work on our project, we need its style sheet. Open `public/index.html` and paste the following link under the `<head>` tag
 ~~~
 <link
   rel="stylesheet"
@@ -143,7 +143,7 @@ Your App.js should now look lile
 ```javascript
 import React, from 'react';
 import './App.css';
-import { Button, Form, Card, ListGroup } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 function App() {
 	const handleClick = () => { 
@@ -160,26 +160,28 @@ function App() {
 export default App;
 ```
 The `import { ... } from '...'` is importing code from the package you already installed. In this case, we are importing a button component. <br/><br/>
-The `function App() {...}` is actually a React Component called "functional component". In the old React syntax, you might have seen it written as `class App extends Component { ... }` (class component). They are not exactly the same thing. The main difference is that when using state in the component, class component will rely on setting up `this.state` and using `setState()` to update the state. Whereas functional component relies on using **react hooks** to manage state. React hooks gives us a much more clean styling of code. This todo app will be using react hooks. If these does make much sense to you yet, don't panic. We will talke more about it later.<br/><br/>
+The `function App() {...}` is actually a React Component called "functional component". In the old React syntax, you might have seen it written as `class App extends Component { ... }` (class component). They are not exactly the same thing. The main difference is that when using state in the component, class component will rely on setting up `this.state` and using `setState()` to update the state. Whereas functional component relies on using **react hooks** to manage state. React hooks gives us a much more clean styling of code. This todo app will be using react hooks. If these doesn't make much sense to you yet, don't panic. We will talk more about it later.<br/><br/>
 The `variant` gives the style to the button.<br/>
-And we passed a function to the `onClick` props of the button, so when you click it, it will execute the function body. Save the file, and go to the browser, you should see a blue button waiting to be clicked.<br/>
+And we passed a function to the `onClick` props of the button, so when you click it, it will execute the function body. Save the file, and go to the browser, you should see a blue button waiting to be clicked.<br/><br/>
+**Note:** The language we are writing here is javascript, but why are we writing these HTML inside javascript? These HTML tags are called "Javascript Syntax Extension" (JSX). In runtime, they will be compiled into pure javascript. <br>
+One other thing to notice is the transition from JSX to javascript. When you are writing in javascript, you can start a JSX expression as you want. But in the middle of JSX, if you want to start a javascript expression, then you need to wrap the javascript statement in `{}`. The `handleClick` is an example. The `onClick=` is part of the JSX, but `handleClick` is a function in javascript defined above. In order to access the function, we wrap the `handleClick` with `{}`.  Just keep this JSX -> javascript transition in mind. If this still doesn't make much sense to you, it's ok. This will come natural to you once you are more experienced with react.
 <br/>
-Click it! But wait, we did the output go? Remember `console.log('..')` prints something? Where is it printed? <br/>
+<br/>
+Click the button! But wait, we did the output go? Remember `console.log('..')` prints something? Where is it printed? <br/>
 The answer is to the browser console. Right-click on a blank space on your browser and click `inspect` (I assume you are using google chrome). You should see a toolbar popup (either from the right or from bottom). Now click the `console` on top of the toolbar. Did you see the output? What happens if you click the button a few more times?
 ## Let's build a todo-app
 Let's build a todo-app. In this process, you will use some functions to manipulate JS arrays such as **map, concat, push, slice...** <br/>
 Also, you will learn to use react state via using react hooks. 
 ### Overall Structure
-We will have 3 files: `App.js`, `Todos.js`, `Todo.js`. <br/>
+We will have 2 files: `App.js`, `Todos.js`. <br/>
 `App.js` is the top level component. It will manage a list of todos data, and pass the data to `Todos.js` to display the list of todos <br/>
-`Todos.js` takes a list todo data and pass each todo data to `Todo.js` to display a single todo <br/>
-`Todo.js` just takes one todo and display it.
+`Todos.js` takes a list todo data and display all the data <br/>
 ### Step1: make a textfield
-It's a todo-app. We need a way to type in the todo content. A textfield is a nice way to do that. In react-bootstrap, this component will give you a textfield:
+It's a todo-app. We need a way to type in the todo content. A textfield is a nice way to do that. In HTML, this component will give you a textfield:
 ```javascript
-<Form.Control
-  type='text'
-  onChange={e => console.log(e.target.value)}
+<input
+	type='text'
+	onChange={onType}
 />
 ```
 It's better to extrack that `onChange` function out, so let's define a new function `onType` within the app component.
@@ -193,7 +195,7 @@ Then, substitue the `onChange` function with the `onType` fuction. Your final `A
 ```javascript
 import React from 'react';
 import './App.css';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 function App() {
 	const handleClick = () => { 
@@ -206,7 +208,7 @@ function App() {
 
 	return (
 		<div>
-			<Form.Control
+			<input
 				type='text'
 				onChange={onType}
 			/>
@@ -237,7 +239,7 @@ Now the whole `App.js` should look like:
 ```javascript
 import React, { useState } from 'react';
 import './App.css';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 function App() {
 	const [todoContent, setTodoContent] = useState('')
@@ -253,7 +255,7 @@ function App() {
 
 	return (
 		<div>
-			<Form.Control
+			<input
 				type='text'
 				onChange={onType}
 			/>
@@ -267,7 +269,7 @@ export default App;
 ### Step2: Get the todos data ready.
 As mentioned in the **Overall Structure** section, the `App.js` manages the data to display. When we add a new todo item, the App should automatically shows the new item that we added. Wait a sec, **"Automatically shows"** ? Doesn't it sound similiar to what the `setStateFunc` does for us? Let's store a list of todos in a state.
 ```javascript
-const [todos, setTodos] = useState([])
+const [todos, setTodos] = useState(["laundry", "homework"])
 ```
 Here, the initial value of the state varibale `todos` is an empty array `[]`. We will use `setTodos` to add more todos to this list. <br/>
 #### A button that adds new todo
@@ -280,7 +282,8 @@ In the code, this is how it looks like:
 const handleClick = () => { 
 	const newTodo = todoContent; //1: read the text that user entered in the textfield
 	todos.push(todoContent);     //2: append it to the `todos`
-	setTodos(todos);             //3: update the `todos` state
+	const newTodos = [...todos]; //   create a new array to help setStateFunc recognize the update the state
+	setTodos(newTodos);             //3: update the `todos` state
 	//print the result 
 	console.log(todos);
 }
@@ -289,16 +292,17 @@ At this point, the `App.js` should look like below:
 ```javascript
 import React, { useState } from 'react';
 import './App.css';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 function App() {
-	const [todos, setTodos] = useState([])
+	const [todos, setTodos] = useState(["laundry", "homework"])
 	const [todoContent, setTodoContent] = useState('')
 
 	const handleClick = () => { 
 		const newTodo = todoContent;
 		todos.push(todoContent);
-		setTodos(todos);
+		const newTodos = [...todos];
+		setTodos(newTodos);
 		//print the result
 		console.log(todos);
 	}
@@ -310,7 +314,7 @@ function App() {
 
 	return (
 		<div>
-			<Form.Control
+			<input
 				type='text'
 				onChange={onType}
 			/>
@@ -320,4 +324,73 @@ function App() {
 }
 
 export default App;
+```
+When you type something in the textfield and click the "Add" button, you should see the updated the `todos` in your console. Now the data is ready. We can keep adding the todos to it. Now we need a way to display the data
+### Step3: Display a data
+As mentioned the the **Overall Structure** section, the `Todos.js` will take a list of todos and display it. Let's do that now. <br/>
+We will first create a file called "Todos.js" under the "src" directory. and add some initial code to it. It should look similiar to How the `App.js` looks like at the beginning.
+```javascript
+import React from 'react';
+
+function Todos(props) {
+	return (
+		<div> Todos </div>
+	);
+}
+
+export default Todos;
+```
+The `Todos.js` now only displays a default text "Todos". We need it to display a list of todos. In HTML, we often use `<ul>` and `<li>` to display such a list. ("ul" stands for "unordered list" and "li" stands for "list item"). The strutcure of it looks like this:
+```javascript
+<ul>
+	<li> item 1 </li>
+	<li> item 2 </li>
+	...
+</ul>
+```
+Let's add that to our `Todos.js`. Now the `Todos.js` should look like:
+```javascript
+import React from 'react';
+
+function Todos(props) {
+	return (
+		<ul>
+			<li> item 1 </li>
+			<li> item 2 </li>
+		</ul>
+	);
+}
+
+export default Todos;
+```
+At this point, the `Todos.js` is displaying some defaulted list. The items inside it is "item 1", "item2". But we want it to display the `todos` that's in the `App.js`. How to access this `todos`? Good question! `App.js` will pass the todos via `props`, and the `Todos.js` will access it via `props`! <br/>
+The `props` is an important concept in React. Recall `state` manages the data inside a react component. `props` manages the communication of data from parent component to child component. (`App.js` uses `Todos.js`, so `App.js` is the parent component, `Todos.js` the child).  <br/>
+<br/>
+
+Inside the `App.js`, it will use the `Todos.js` like below:
+```javascript
+<Todos todos={todos} />
+```
+And inside `Todos.js`, it will access the `todos` via props like this:
+```javascript
+const { todos } = props;
+```
+Because the `todos` is a list, we can use the **map** function. If you have taken a functional programming course, **map** takes a 2 arguments: a list and a function. It applies the function to each item in the list and return a new list that contains the transformed elements. Let's take a look at how this is done in javasript:
+```javascript
+todos.map(todo -> <li> {todo} </li>)
+```
+Here, the `todos` is the list of todos. We call the map function of it. The map takes a function as argument. That function `todo -> <li> {todo} </li>` is transforming each `todo` to `<li> {todo} </li>` to fit inside the `<ul>  </ul>`. Now the `Todos.js` should look like:
+```javascript
+import React from 'react';
+
+function Todos(props) {
+	const { todos } = props;
+	return (
+		<ul>
+			{todos.map(todo => <li> {todo} </li>)}
+		</ul>
+	);
+}
+
+export default Todos;
 ```
