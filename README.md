@@ -289,7 +289,7 @@ const handleClick = () => {
 }
 ```
 The `[...todos]` is making a copy of todos. The `...` is called the spread operator in js. If you are interesed, research more about it. I won't talk more about it here. It just clones the array for us here. <br/>
-We need to clone the array before calling `setTodos`. If the state value you are using is simple data type (number, string), then you don't need to do the cloning. However, if your state is a complex type (array, object), then you will need to do the cloning. The reason is that in react, it stores a reference to these complex structure, ignorant of the exact content of these structure. If we only add new item to the list, the reference stays the same, react won't realize the update.
+We need to clone the array before calling `setTodos`. If the state value you are using is simple data type (number, string), then you don't need to do the cloning. However, if your state is a complex type (array, object), then you will need to do the cloning. The reason is that in react, it stores a reference to these complex structure, ignorant of the exact content of these structure. If we only add new item to the list, the reference stays the same, react won't realize the update. Are you concerned that cloning is slow? Don't worry. Cloning thousands of items is a piece of cake for js. <br/>
 At this point, the `App.js` should look like below:
 ```javascript
 import React, { useState } from 'react';
