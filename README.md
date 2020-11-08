@@ -271,7 +271,7 @@ As mentioned in the **Overall Structure** section, the `App.js` manages the data
 ```javascript
 const [todos, setTodos] = useState(["laundry", "homework"])
 ```
-Here, the initial value of the state varibale `todos` is an empty array `[]`. We will use `setTodos` to add more todos to this list. <br/>
+Here, the initial value of the state varibale `todos` is an array with 2 todos. We will use `setTodos` to add more todos to this list. <br/>
 #### A button that adds new todo
 Let's implement a button that adds new todo. Currently, we have a button that only prints "Click" to the console. Let's make it add new todo to our state variable `todos`. What's the workflow to add a new todo? <br/>
 1. read the text that user entered in the textfield <br/>
@@ -288,6 +288,8 @@ const handleClick = () => {
 	console.log(todos);
 }
 ```
+The `[...todos]` is making a copy of todos. The `...` is called the spread operator in js. If you are interesed, research more about it. I won't talk more about it here. It just clones the array for us here. <br/>
+We need to clone the array before calling `setTodos`. If the state value you are using is simple data type (number, string), then you don't need to do the cloning. However, if your state is a complex type (array, object), then you will need to do the cloning. The reason is that in react, it stores a reference to these complex structure, ignorant of the exact content of these structure. If we only add new item to the list, the reference stays the same, react won't realize the update.
 At this point, the `App.js` should look like below:
 ```javascript
 import React, { useState } from 'react';
