@@ -396,3 +396,44 @@ function Todos(props) {
 
 export default Todos;
 ```
+In the end, we import the `Todos.js` in `App.js` and use it. The final `App.js` looks like below:
+```javascript
+import React, { useState } from 'react';
+import './App.css';
+import { Button } from 'react-bootstrap';
+import Todos from './Todos';
+
+function App() {
+	const [todos, setTodos] = useState(["laundry", "homework"])
+	const [todoContent, setTodoContent] = useState('')
+
+	const handleClick = () => { 
+		const newTodo = todoContent; 
+		todos.push(newTodo);
+		const newTodos = [...todos];
+		setTodos(newTodos);
+		console.log(todos);
+	}
+
+	const onType = (event) => {
+		console.log(todoContent);
+		setTodoContent(event.target.value)
+	}
+
+	return (
+		<div>
+			<input
+				type='text'
+				onChange={onType}
+			/> <br/>
+			<Button variant="primary" onClick={handleClick}>Add</Button>
+			<br/>
+			<Todos todos={todos} />
+		</div>
+	);
+}
+
+export default App;
+```
+#### In the end
+Now, going to the website, as you type in new todo in the textfield and click the "add" button, it should add to the todo list. To explain what happens in this process, when you type in new todo in the textfield, the App.js component stores the new todo's content in its state variable `todoContent`. Then as you click the "add" button, the "handleClick" function will be triggered. It grabs the 'todoContent' state value and add it to the 'todos' state value. Calling the "setStateFunc" (setTodoContent, setTodos) will trigger a refresh on the page. The `App.js` passes the todos to 'Todos.js' through props. Then 'Todos.js' just take the todos and display it.
